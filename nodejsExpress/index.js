@@ -1,11 +1,11 @@
 //index.js 使用路由
 var express = require('express');
 var app=express();
-// var bodyParser = require('body-parser')
+var bodyParser = require('body-parser')
 
-// app.use(bodyParser.urlencoded({
-//     extended:true
-// }))
+app.use(bodyParser.urlencoded({
+    extended:true
+}))
 //路由
 var router = require('./router.js');
 app.use('/',router);

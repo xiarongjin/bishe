@@ -14,7 +14,7 @@ var connection=mysql.createConnection({
 var router = express.Router()
 router.get('/', function (req, res) {
   //sql语句
-var sql="select * from admin";
+let sql="select * from admin";
 //执行
 connection.query(sql,function(error,result){
 if(error) return;
@@ -27,16 +27,280 @@ router.get('/about', function (req, res) {
   res.send('About birds')
 })
 
-//登录验证
-router.post('/', function (req, res) {
+
+//管理员登录验证
+router.post('/admin/login', function (req, res) {
   console.log(req.body)
   // 接受参数
-  var name = req.body.name;
-  var age = req.body.age;
+  var adminName = req.body.adminName;
+  var password = req.body.password;
+  let sql = `SELECT password from admin WHERE name = '${adminName}'`
+  connection.query(sql,function(error,data){
+    if(error) return;
+    if (data =='' || data == undefined) {
+      res.send({
+        // msg:'登录失败，用户名或密码错误',
+        code: 0
+      });
+      console.log('管理员不存在！')
+    } else {
+        if (data[0].password==password) {
+          res.send({
+            // msg:`${name}登录成功`,
+            adminName: adminName,
+            code: 1
+          })
+          console.log('成功')
+        } else {
+          res.send({
+            // msg:'登录失败，用户名或密码错误',
+            code: 2
+          })
+          console.log('密码错误')
+        }
+    }
+  })
+})
+
+
+//用户登录验证
+router.post('/usr/login', function (req, res) {
+  console.log(req.body)
+  // 接受参数
+  var usrname = req.body.usrname;
+  var password = req.body.password;
+  let sql = `SELECT password from usr WHERE name = '${usrname}'`
+  connection.query(sql,function(error,data){
+    if(error) return;
+    if (data =='' || data == undefined) {
+      res.send({
+        // msg:'登录失败，用户名或密码错误',
+        code: 0
+      });
+      console.log('用户不存在！')
+    } else {
+        if (data[0].password==password) {
+          res.send({
+            // msg:`${name}登录成功`,
+            usrname: usrname,
+            code: 1
+          })
+          console.log('成功')
+        } else {
+          res.send({
+            // msg:'登录失败，用户名或密码错误',
+            code: 2
+          })
+          console.log('密码错误')
+        }
+    }
+  })
+})
+
+
+//增加商品信息
+router.post("/admin/goods/add",function (req,res) {
+  console.log(req.body);
+  let goods=req.body
+  let sql=`Insert into goods(type,name,count,image,price) values("${goods.type}","${goods.name}",${goods.count},"${goods.image}",${goods.price})`
+ console.log(sql);
+  connection.query(sql,function (error,data) {
+    if (error) return;
+    console.log(data.affectedRows);
+    if (data.affectedRows==1) {
+      res.send({
+        msg:'添加成功',
+        id:data.insertId
+      })
+    }
+  })
+})
+
+//删除商品信息
+router.post("/admin/goods/del",function (req,res) {
+  console.log(req.body);
+  let id=req.body.id;
+  // 先进行查询商品照片地址
+  let sql1=`select image from goods where id=${id}`
+  connection.query(sql1,function (error,data1) {
+    if (error) return;
+    if (data1[0]) {
+      //获取商品照片地址url
+      console.log(data1[0].image);
+    }
+     
+  })
+  let sql=`delete from goods where id=${id}`
+  connection.query(sql,function (error,data) {
+    if (error) return;
+    console.log(data);
+    if (data.affectedRows==1) {
+      res.send({
+        msg:'删除成功'
+      })
+    }else{
+        res.send({
+          msg:'该商品不存在'
+        })
+    }
+  })
+})
+
+//修改商品信息
+router.post("/admin/goods/change",function (req,res) {
+  console.log(req.body);
+  let id=req.body.id;
+  var sqlchange;
+  let buy=req.body.buy;
+  let price=req.body.price;
+  if (buy&&price) {
+    sqlchange=`update  goods set count=count-${buy},price=${price} where id=${id}`
+  }else if (req.body.buy) {
+    sqlchange=`update  goods set count=count-${buy} where id=${id}`
+  }else{
+    sqlchange=`update  goods set price=${price} where id=${id}`
+  }
+  console.log(sqlchange);
+  connection.query(sqlchange,function (error,data) {
+    if (error) return;
+    console.log(data);
+    if (data.affectedRows==1) {
+      res.send({
+        msg:'修改成功'
+      })
+    }else{
+        res.send({
+          msg:'该商品不存在'
+        })
+    }
+  })
+})
+
+//获取商品所有信息
+router.get('/admin/goods/search',function (req,res) {
+  let sql=`select * from goods`
+  connection.query(sql,function (error,data) {
+    if (error) return;
+    console.log(data);
+    res.send({
+      data:data
+    })
+  })
+})
+
+
+
+//获取下单所有记录
+router.get('/admin/record/search',function (req,res) {
+  let sql=`select * from record`
+  connection.query(sql,function (error,data) {
+    if (error) return;
+    console.log(data);
+    res.send({
+      data:data
+    })
+  })
+})
+
+
+//下单状态修改
+router.post('/admin/record/change',function (req,res) {
+  let id=req.body.id
+  let sql=`update  record set done=1 where id=${id}`
+  connection.query(sql,function (error,data) {
+    if (error) return;
+    console.log(data);
+    if (data.affectedRows==1) {
+      res.send({
+        msg:'修改成功',
+        code:1
+      })
+    }else{
+        res.send({
+          msg:'该记录不存在',
+          code:0
+        })
+    }
+  })
+})
+
+
+// 用户注册接口
+router.post('/usr/register', function (req, res) {
+  let usrdata=req.body;
+  let usrname=usrdata.usrname;
+  let password=usrdata.password;
+  let address=usrdata.address;
+  let tel=usrdata.tel;
+
+  let sqlFirst=`select * from usr where name='${usrname}'`
+  connection.query(sqlFirst,function (error,data) {
+    if (error) {
+      // console.log(error);
+    }
+    console.log(sqlFirst);
+    if (data =='' || data == undefined) {
+      let sql = `INSERT INTO usr(name,password,tel,address) VALUES ('${usrname}','${password}','${tel}','${address}')`;
+      connection.query(sql,function (error,data) {
+        console.log(sql);
+        if (error) {
+          console.log(error);
+          res.send({
+            msg:"注册失败",
+            code:0
+          })
+        }else{
+          res.send({
+            msg:"注册成功",
+            code:1
+          })
+        }
+      })
+    }else{
+      res.send({
+        msg:"用户名已存在",
+        code:3
+      })
+    }
+  })
+})
+
+
+//用户下单
+router.post('/usr/record/add', function (req, res) {
+ let record=req.body;
+ let sql=`insert into record(usrName,goodsInfo,time) values ('${record.usrname}','${record.goodsInfo}','${record.time}')`
+connection.query(sql,function (error,data) {
+  if (error) {
+   console.log(error);
+   res.send({
+     msg:'下单出错了'
+   }) 
+   return
+  }
   res.send({
-    msg: 'hello express!我是post请求的返回值,下面是你请求发送给我的数据',
-    name: name,
-    age: age
+    msg:'增加成功',
+    id:data.insertId
+  })
+})
+})
+
+//用户查询下单
+router.post("/usr/record/search",function (req,res) {
+  let sql=`select * from record where usrName='${req.body.usrname}'`;
+  connection.query(sql,function (error,data) {
+    if (error) {
+      console.log(error);
+      res.send({
+        msg:'查询出错了'
+      }) 
+      return
+     }
+     res.send({
+       msg:'查询成功',
+       data:data
+     })
+    
   })
 })
 
