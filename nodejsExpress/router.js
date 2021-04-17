@@ -7,6 +7,7 @@ var mysql=require('mysql');
 
 var connection=mysql.createConnection({
   host:'webxrj.top',
+  // host:'localhost',//本地
   user:'bishe',
   password:'1web@XRJ',
   database:'bishe'
