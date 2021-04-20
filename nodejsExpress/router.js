@@ -281,11 +281,8 @@ fetch("http://m.maoyan.com/ajax/movieOnInfoList")
     return response.json();
   })
   .then(function (myJson) {
-    router.get("/movieList", function (req, res) {
-      res.send({
-        msg: "查询成功",
-        data: myJson,
-      });
+    router.get("/movieOnInfoList", function (req, res) {
+      res.send(myJson);
     });
   });
 
