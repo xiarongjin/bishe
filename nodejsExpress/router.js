@@ -1,4 +1,5 @@
 var express = require("express");
+var fetch = require("node-fetch");
 
 //链接数据库
 var mysql = require("mysql");
@@ -274,5 +275,18 @@ router.post("/usr/record/search", function (req, res) {
     });
   });
 });
+
+fetch("http://m.maoyan.com/ajax/movieOnInfoList")
+  .then(function (response) {
+    return response.json();
+  })
+  .then(function (myJson) {
+    router.get("/movieList", function (req, res) {
+      res.send({
+        msg: "查询成功",
+        data: myJson,
+      });
+    });
+  });
 
 module.exports = router;
