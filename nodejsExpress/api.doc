@@ -1,0 +1,108 @@
+采用的是nodejs平台的express框架来快速搭建后端接口。
+首先npm下载express模块，然后使用路由来管理接口
+使用mysql中间件（需要下载）来连接数据库
+
+
+管理员端
+
+登录验证接口post
+/admin/login
+接收参数：adminName用户名 password密码
+返回参数：  // msg:'登录失败，用户名或密码错误',
+             code: 0
+// msg:`${ adminName}登录成功`,
+            adminName: adminName,
+            code: 1
+  // msg:'登录失败，用户名或密码错误',
+            code: 2
+
+*商品图片上传并返回url：
+需要使用中间件multer
+
+增加商品信息接口post
+/admin/goods/add
+Insert into goods(id,type,name,count,image,price) values(1,’饮料’，冰红茶，100,”zhaopian”,3.00);
+接收参数：type,name,count,image,price
+返回参数：id
+
+
+删除商品信息接口post
+/admin/goods/del
+Delete from goods where id=id
+接收参数：id
+返回参数：对应商品的imageurl 删除成功、没找到相应商品
+
+
+修改商品库存或价格信息接口post
+/admin/goods/change
+接收参数：id  库存变动或者价格变动
+返回参数：修改成功、没找到相应商品
+
+
+
+
+查询商品信息接口（get）
+/admin/goods/search
+Select*from goods
+获取商品表所有信息
+
+
+查询下单信息接口（get）
+/admin/record/search
+Select*from record
+获取下单记录表所有信息
+
+
+下单状态修改post
+/admin/record/change
+接收参数：id
+返回参数：code:1修改成功，code:0不存在
+
+
+
+
+
+ 
+
+用户端
+
+用户注册接口post
+/usr/register
+接收参数：usrname,password,tel,address
+返回参数：code:0 注册失败，code:3用户名已存在，code:1注册成功
+
+用户登录验证post
+/usr/login
+接收参数：usrname用户名 password密码
+返回参数：  // msg:'登录失败，用户名或密码错误',
+             code: 0
+// msg:`${ usrname}登录成功`,
+            usrname: usrname,
+            code: 1
+  // msg:'登录失败，用户名或密码错误',
+            code: 2
+
+
+用户下单（新增下单记录）post
+/usr/record/add
+接收参数：用户usrid、商品信息id和数量count组成的字符串、下单时间time
+返回参数：错误提示或记录的id
+
+用户查询下单记录post
+/usr/record/search
+接收参数：用户名usrname
+返回参数：该用户的下单记录
+
+用户取消订单
+待开发
+
+获取管理员信息所有get
+/admin/search/admin
+return data
+获取所有用户信息get
+/admin/search/usr
+return data
+
+耗时：1+1+1
+上一次编辑：3月23
+此次修改：4月23

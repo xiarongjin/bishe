@@ -86,6 +86,29 @@ router.post("/usr/login", function (req, res) {
   });
 });
 
+//get获取管理员信息
+router.get("/admin/search/admin", function (req, res) {
+  let sql = `select * from admin`;
+  connection.query(sql, function (error, data) {
+    if (error) return;
+
+    res.send({
+      data: data,
+    });
+  });
+});
+
+//获取用户信息
+router.get("/admin/search/usr", function (req, res) {
+  let sql = `select * from usr`;
+  connection.query(sql, function (error, data) {
+    if (error) return;
+
+    res.send({
+      data: data,
+    });
+  });
+});
 //增加商品信息
 router.post("/admin/goods/add", function (req, res) {
   let goods = req.body;
