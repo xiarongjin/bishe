@@ -1,5 +1,5 @@
 var express = require("express");
-var fetch = require("node-fetch");
+var axios = require("axios");
 
 //链接数据库
 var mysql = require("mysql");
@@ -275,15 +275,5 @@ router.post("/usr/record/search", function (req, res) {
     });
   });
 });
-
-fetch("http://m.maoyan.com/ajax/movieOnInfoList")
-  .then(function (response) {
-    return response.json();
-  })
-  .then(function (myJson) {
-    router.get("/movieOnInfoList", function (req, res) {
-      res.send(myJson);
-    });
-  });
 
 module.exports = router;
