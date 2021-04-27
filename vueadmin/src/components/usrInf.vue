@@ -8,24 +8,17 @@
 </template>
 
 <script>
+import myAjax from "../utils/ajax";
 export default {
   data() {
     return {
-      tableData: [
-        {
-          usr: "01",
-          name: "饮料",
-          address: "王小虎",
-          tel: "库存",
-        },
-        {
-          usr: "01",
-          name: "饮料",
-          address: "王小虎",
-          tel: "库存",
-        },
-      ],
+      tableData: [],
     };
+  },
+  mounted() {
+    myAjax
+      .get("/admin/search/usr")
+      .then((res) => (this.tableData = res.data.data));
   },
 };
 </script>

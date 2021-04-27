@@ -6,20 +6,18 @@
 </template>
 
 <script>
+import myAjax from "../utils/ajax";
 export default {
   data() {
     return {
-      tableData: [
-        {
-          id: "01",
-          name: "王小虎",
-        },
-        {
-          id: "02",
-          name: "王小虎",
-        },
-      ],
+      tableData: [],
     };
+  },
+  mounted() {
+    myAjax
+      .get("/admin/search/admin")
+      .then((res) => (this.tableData = res.data.data));
+    // console.log(myAjax);
   },
 };
 </script>

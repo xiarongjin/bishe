@@ -10,28 +10,17 @@
 </template>
 
 <script>
+import myAjax from "../utils/ajax";
 export default {
   data() {
     return {
-      tableData: [
-        {
-          id: "01",
-          type: "饮料",
-          name: "王小虎",
-          count: "库存",
-          image: "照片",
-          price: "价格",
-        },
-        {
-          id: "02",
-          type: "饮料",
-          name: "王小虎",
-          count: "库存",
-          image: "照片",
-          price: "价格",
-        },
-      ],
+      tableData: [],
     };
+  },
+  mounted() {
+    myAjax
+      .get("/admin/goods/search")
+      .then((res) => (this.tableData = res.data.data));
   },
 };
 </script>
