@@ -1,6 +1,6 @@
 var express = require("express");
 var axios = require("axios");
-
+const fetch = require("node-fetch");
 //链接数据库
 var mysql = require("mysql");
 
@@ -12,19 +12,6 @@ var connection = mysql.createConnection({
   database: "bishe",
 });
 var router = express.Router();
-router.get("/", function (req, res) {
-  //sql语句
-  let sql = "select * from admin";
-  //执行
-  connection.query(sql, function (error, result) {
-    if (error) return;
-
-    res.send(result);
-  });
-});
-router.get("/about", function (req, res) {
-  res.send("About birds");
-});
 
 //管理员登录验证
 router.post("/admin/login", function (req, res) {
@@ -297,6 +284,13 @@ router.post("/usr/record/search", function (req, res) {
       data: data,
     });
   });
+});
+
+//转发猫眼电影api
+router.get("/maoyan", function (req, res) {
+  fetch("https://m.maoyan.com/ajax/movieOnInfoList")
+    .then((res) => res.json())
+    .then((json) => res.send(json));
 });
 
 module.exports = router;

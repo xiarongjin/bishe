@@ -2,29 +2,6 @@
 var express = require("express");
 var app = express();
 // var bodyParser = require("body-parser");
-const { createProxyMiddleware } = require("http-proxy-middleware");
-
-// app.use(
-//   bodyParser.urlencoded({
-//     extended: true,
-//   })
-// );
-
-// proxy middleware options
-const options = {
-  target: "http://m.maoyan.com/ajax", // target host
-  changeOrigin: true, // needed for virtual hosted sites
-  ws: true, // proxy websockets
-  pathRewrite: {
-    "^/api": "", // rewrite path
-  },
-};
-
-// create the proxy (without context)
-const exampleProxy = createProxyMiddleware(options);
-
-// mount `exampleProxy` in web server
-app.use("/api", exampleProxy);
 
 //设置跨域访问
 app.all("*", function (req, res, next) {
