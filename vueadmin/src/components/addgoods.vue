@@ -48,9 +48,13 @@
             label="库存"
           ></el-input-number>
         </el-form-item>
-
         <el-form-item>
-          <el-button type="primary" @click="onSubmit">立即创建</el-button>
+          <el-button v-if="form.id == ''" type="primary" @click="onSubmit"
+            >立即创建</el-button
+          >
+          <el-button v-else type="warning" @click="onSubmit"
+            >立即修改</el-button
+          >
         </el-form-item>
       </el-form>
     </div>
@@ -60,12 +64,14 @@
 <script>
 import myAjax from "../utils/ajax";
 import common from "./common";
+import { baseUrl } from "../utils/ajax";
 export default {
   data() {
     return {
       item: {},
-      upLoadUrl: "http://webxrj.top:3838/usr/load/image",
+      upLoadUrl: baseUrl + "/usr/load/image",
       form: {
+        id: "",
         name: "",
         type: "食品",
         price: 1,
@@ -76,9 +82,24 @@ export default {
   },
   methods: {
     onSubmit() {
-      myAjax
-        .post("/admin/goods/add", this.form)
-        .then((res) => console.log(res));
+      if (this.form.id) {
+        myAjax.post("/admin/goods/change", this.form).then((res) => {
+          if (res.status == 200) {
+            this.$router.push({ name: "商品信息" });
+          } else {
+            alert("服务器好像出问题了！");
+          }
+        });
+      } else {
+        myAjax.post("/admin/goods/add", this.form).then((res) => {
+          console.log(res);
+          if (res.status == 200) {
+            this.$router.push({ name: "商品信息" });
+          } else {
+            alert("服务器好像出问题了！");
+          }
+        });
+      }
     },
     beforeUp(file) {
       const isJPG = file.type === "image/jpeg";
@@ -107,6 +128,14 @@ export default {
     priceChange(value) {
       console.log(value);
     },
+  },
+  mounted() {
+    if (this.$route.params.id) {
+      this.form = { ...this.$route.params, imageUrl: this.$route.params.image };
+      this.item = { name: "修改商品信息" };
+    } else {
+      this.item = { name: "添加商品" };
+    }
   },
   components: {
     common,

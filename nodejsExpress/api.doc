@@ -35,7 +35,7 @@ Delete from goods where id=id
 
 修改商品库存或价格信息接口post
 /admin/goods/change
-接收参数：id  库存变动或者价格变动
+接收参数：id  信息修改参数
 返回参数：修改成功、没找到相应商品
 
 

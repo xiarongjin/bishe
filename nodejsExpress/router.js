@@ -12,7 +12,15 @@ var connection = mysql.createConnection({
   password: "1web@XRJ",
   database: "bishe",
 });
+connection.end();
 var router = express.Router();
+
+function conDb(sql, callback) {
+  connection = mysql.createConnection(connection.config);
+  connection.connect();
+  connection.query(sql, callback);
+  connection.end();
+}
 
 //管理员登录验证
 router.post("/admin/login", function (req, res) {
@@ -20,7 +28,7 @@ router.post("/admin/login", function (req, res) {
   var adminName = req.body.adminName;
   var password = req.body.password;
   let sql = `SELECT password from admin WHERE name = '${adminName}'`;
-  connection.query(sql, function (error, data) {
+  conDb(sql, function (error, data) {
     if (error) return;
     if (data == "" || data == undefined) {
       res.send({
@@ -50,7 +58,7 @@ router.post("/usr/login", function (req, res) {
   var usrname = req.body.usrname;
   var password = req.body.password;
   let sql = `SELECT password from usr WHERE name = '${usrname}'`;
-  connection.query(sql, function (error, data) {
+  conDb(sql, function (error, data) {
     if (error) return;
     if (data == "" || data == undefined) {
       res.send({
@@ -77,7 +85,7 @@ router.post("/usr/login", function (req, res) {
 //get获取管理员信息
 router.get("/admin/search/admin", function (req, res) {
   let sql = `select * from admin`;
-  connection.query(sql, function (error, data) {
+  conDb(sql, function (error, data) {
     if (error) return;
 
     res.send({
@@ -89,7 +97,7 @@ router.get("/admin/search/admin", function (req, res) {
 //获取用户信息
 router.get("/admin/search/usr", function (req, res) {
   let sql = `select * from usr`;
-  connection.query(sql, function (error, data) {
+  conDb(sql, function (error, data) {
     if (error) return;
 
     res.send({
@@ -100,9 +108,9 @@ router.get("/admin/search/usr", function (req, res) {
 //增加商品信息
 router.post("/admin/goods/add", function (req, res) {
   let goods = req.body;
-  let sql = `Insert into goods(type,name,count,image,price) values("${goods.type}","${goods.name}",${goods.count},"${goods.image}",${goods.price})`;
+  let sql = `Insert into goods(type,name,count,image,price) values("${goods.type}","${goods.name}",${goods.count},"${goods.imageUrl}",${goods.price})`;
 
-  connection.query(sql, function (error, data) {
+  conDb(sql, function (error, data) {
     if (error) return;
 
     if (data.affectedRows == 1) {
@@ -119,6 +127,8 @@ router.post("/admin/goods/del", function (req, res) {
   let id = req.body.id;
   // 先进行查询商品照片地址
   let sql1 = `select image from goods where id=${id}`;
+  connection = mysql.createConnection(connection.config);
+  connection.connect();
   connection.query(sql1, function (error, data1) {
     if (error) return;
     if (data1[0]) {
@@ -139,25 +149,15 @@ router.post("/admin/goods/del", function (req, res) {
       });
     }
   });
+  connection.end();
 });
 
 //修改商品信息
 router.post("/admin/goods/change", function (req, res) {
-  let id = req.body.id;
-  var sqlchange;
-  let buy = req.body.buy;
-  let price = req.body.price;
-  if (buy && price) {
-    sqlchange = `update  goods set count=count-${buy},price=${price} where id=${id}`;
-  } else if (req.body.buy) {
-    sqlchange = `update  goods set count=count-${buy} where id=${id}`;
-  } else {
-    sqlchange = `update  goods set price=${price} where id=${id}`;
-  }
-
-  connection.query(sqlchange, function (error, data) {
+  let goods = req.body;
+  let sql = `update goods set type="${goods.type}",name="${goods.name}",count=${goods.count},image="${goods.imageUrl}",price=${goods.price} where id=${goods.id}`;
+  conDb(sql, function (error, data) {
     if (error) return;
-
     if (data.affectedRows == 1) {
       res.send({
         msg: "修改成功",
@@ -173,7 +173,7 @@ router.post("/admin/goods/change", function (req, res) {
 //获取商品所有信息
 router.get("/admin/goods/search", function (req, res) {
   let sql = `select * from goods`;
-  connection.query(sql, function (error, data) {
+  conDb(sql, function (error, data) {
     if (error) return;
 
     res.send({
@@ -185,7 +185,7 @@ router.get("/admin/goods/search", function (req, res) {
 //获取下单所有记录
 router.get("/admin/record/search", function (req, res) {
   let sql = `select * from record`;
-  connection.query(sql, function (error, data) {
+  conDb(sql, function (error, data) {
     if (error) return;
 
     res.send({
@@ -198,7 +198,7 @@ router.get("/admin/record/search", function (req, res) {
 router.post("/admin/record/change", function (req, res) {
   let id = req.body.id;
   let sql = `update  record set done=1 where id=${id}`;
-  connection.query(sql, function (error, data) {
+  conDb(sql, function (error, data) {
     if (error) return;
 
     if (data.affectedRows == 1) {
@@ -224,6 +224,8 @@ router.post("/usr/register", function (req, res) {
   let tel = usrdata.tel;
 
   let sqlFirst = `select * from usr where name='${usrname}'`;
+  connection.connection = mysql.createConnection(connection.config);
+  connection.connect();
   connection.query(sqlFirst, function (error, data) {
     if (error) {
     }
@@ -250,13 +252,14 @@ router.post("/usr/register", function (req, res) {
       });
     }
   });
+  connection.end();
 });
 
 //用户下单
 router.post("/usr/record/add", function (req, res) {
   let record = req.body;
   let sql = `insert into record(usrName,goodsInfo,time) values ('${record.usrname}','${record.goodsInfo}','${record.time}')`;
-  connection.query(sql, function (error, data) {
+  conDb(sql, function (error, data) {
     if (error) {
       res.send({
         msg: "下单出错了",
@@ -273,7 +276,7 @@ router.post("/usr/record/add", function (req, res) {
 //用户查询下单
 router.post("/usr/record/search", function (req, res) {
   let sql = `select * from record where usrName='${req.body.usrname}'`;
-  connection.query(sql, function (error, data) {
+  conDb(sql, function (error, data) {
     if (error) {
       res.send({
         msg: "查询出错了",

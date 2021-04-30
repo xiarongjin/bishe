@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="width:650px">
     <div v-if="this.$router.currentRoute.path == '/goodsInf'">
       <router-link to="/goodsInf/addgoods">
         <el-button type="primary">添加商品</el-button>
@@ -35,17 +35,18 @@
               circle
             ></el-button>
             <el-button
-              type="primary"
+              type="warning"
               icon="el-icon-edit"
               size="small"
               circle
+              @click="toChange(scope.$index, tableData)"
             ></el-button>
           </template>
         </el-table-column>
       </el-table>
     </div>
 
-    <router-view></router-view>
+    <router-view :key="$route.fullPath"></router-view>
   </div>
 </template>
 
@@ -61,6 +62,9 @@ export default {
   methods: {
     deleteRow(index, rows) {
       rows.splice(index, 1);
+    },
+    toChange(index, rows) {
+      this.$router.push({ name: "添加商品", params: rows[index] });
     },
   },
   mounted() {
