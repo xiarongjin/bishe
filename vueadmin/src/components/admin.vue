@@ -17,7 +17,6 @@ export default {
     myAjax
       .get("/admin/search/admin")
       .then((res) => (this.tableData = res.data.data));
-    // console.log(myAjax);
   },
 };
 </script>

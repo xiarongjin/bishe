@@ -103,6 +103,16 @@ return data
 /admin/search/usr
 return data
 
+图片上传post
+/usr/load/image
+返回对象
+{  
+  status: 200,
+  msg: "图片上传成功",
+  result: { url: `/serverImage/${imageName}` },
+}
+
+
 ws接口处理逻辑
 
 用户请求接口时需携带
@@ -115,6 +125,7 @@ user:"" string：唯一标识
 
 ps:以上处理普通http请求的接口端口号为3838
 处理ws请求的端口号为3939
+在另一个服务上
 
 耗时：1+1+1
 上一次编辑：3月23

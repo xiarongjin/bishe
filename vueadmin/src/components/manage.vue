@@ -2,9 +2,8 @@
   <el-row class="tac">
     <el-col :span="1"> </el-col>
     <el-col :span="4">
-      <h5>后台管理页面</h5>
       <el-menu
-        default-active="/orderInf"
+        default-active=""
         class="el-menu-vertical-demo"
         @open="handleOpen"
         @close="handleClose"
@@ -20,7 +19,7 @@
         </el-menu-item>
         <el-menu-item index="/orderInf">
           <i class="el-icon-menu"></i>
-          <span slot="title">预定信息</span>
+          <span slot="title">预定信息<span class="textmsg"></span></span>
         </el-menu-item>
         <el-menu-item index="/usrInf">
           <i class="el-icon-menu"></i>
@@ -29,7 +28,15 @@
       </el-menu>
     </el-col>
     <el-col :span="19">
-      <router-view></router-view>
+      <el-main>
+        <div
+          class="homeWelcome"
+          v-if="this.$router.currentRoute.path == '/home'"
+        >
+          欢迎来到云E办系统！
+        </div>
+        <router-view class="homeRouterView" />
+      </el-main>
     </el-col>
   </el-row>
 </template>
@@ -45,3 +52,94 @@ export default {
   },
 };
 </script>
+<style>
+.textmsg {
+  display: block;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: red;
+}
+/* 整体框架 */
+.el-header {
+  background-color: #409eff;
+  color: #333;
+  text-align: center;
+  line-height: 60px;
+}
+
+.el-aside {
+  background-color: #d3dce6;
+  color: #333;
+  text-align: center;
+  height: 100%;
+  line-height: 200px;
+}
+
+.homeWelcome {
+  text-align: center;
+  font-size: 30px;
+  font-family: 华文楷体;
+  color: #409eff;
+  padding-top: 50px;
+}
+
+.homeRouterView {
+  margin-top: 10px;
+}
+
+/* 头部 */
+
+.col {
+  height: 60px;
+  /* border: 1px solid ; */
+}
+.left {
+  float: left;
+  font-size: 30px;
+  font-family: 华文楷体;
+  color: white;
+}
+.right {
+  /* width: 160px; */
+  float: right;
+  color: #606266;
+  font-size: 14px;
+  /* border: 1px solid ;  */
+}
+.right span {
+  /* border: 1px solid ; */
+  position: relative;
+  top: -5px;
+  display: inline-block;
+  /* width: 100px; */
+  height: 20px;
+  line-height: 20px;
+  cursor: pointer;
+}
+.right button {
+  position: relative;
+  top: -5px;
+  margin-right: 5px;
+  background-color: transparent;
+  cursor: pointer;
+  border: none;
+  outline: none;
+}
+.right img {
+  /* display: inline-block; */
+  cursor: pointer;
+  margin-left: 10px;
+  /* border: 1px solid ; */
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+body {
+  margin: 0px;
+  padding: 0px;
+}
+</style>

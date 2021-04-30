@@ -1,6 +1,7 @@
 var express = require("express");
 var axios = require("axios");
 const fetch = require("node-fetch");
+const uploadImg = require("./uploadImg");
 //链接数据库
 var mysql = require("mysql");
 
@@ -286,6 +287,10 @@ router.post("/usr/record/search", function (req, res) {
   });
 });
 
+//图片接收
+router.post("/usr/load/image", function (req, res) {
+  uploadImg(req, res);
+});
 //转发猫眼电影api
 router.get("/maoyan", function (req, res) {
   fetch("https://m.maoyan.com/ajax/movieOnInfoList")
