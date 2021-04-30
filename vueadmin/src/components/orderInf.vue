@@ -1,6 +1,6 @@
 <template>
   <el-table :data="tableData" height="500" style="width: 100%">
-    <el-table-column prop="id" label="id" width="100"> </el-table-column>
+    <el-table-column prop="id" label="订单号" width="100"> </el-table-column>
     <el-table-column prop="usrName" label="用户姓名" width="140">
     </el-table-column>
     <el-table-column prop="goodsInfo" label="商品表" width="180">

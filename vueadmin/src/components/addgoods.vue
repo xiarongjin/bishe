@@ -51,7 +51,6 @@
 
         <el-form-item>
           <el-button type="primary" @click="onSubmit">立即创建</el-button>
-          <el-button>取消</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -59,12 +58,13 @@
 </template>
 
 <script>
+import myAjax from "../utils/ajax";
 import common from "./common";
 export default {
   data() {
     return {
       item: {},
-      upLoadUrl: "http://localhost:3838/usr/load/image",
+      upLoadUrl: "http://webxrj.top:3838/usr/load/image",
       form: {
         name: "",
         type: "食品",
@@ -76,7 +76,9 @@ export default {
   },
   methods: {
     onSubmit() {
-      console.log(this.form);
+      myAjax
+        .post("/admin/goods/add", this.form)
+        .then((res) => console.log(res));
     },
     beforeUp(file) {
       const isJPG = file.type === "image/jpeg";
@@ -91,14 +93,13 @@ export default {
       return isJPG && isLt2M;
     },
     handleAvatarSuccess(res) {
-      console.log(res.result);
       this.form.imageUrl = res.result.url;
     },
     loaderror() {
       alert("不好意思，上传失败了!");
     },
-    loadPro(event) {
-      console.log(event.percent);
+    loadPro() {
+      // console.log(event.percent);
     },
     handleChange(value) {
       console.log(value);
