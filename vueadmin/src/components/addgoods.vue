@@ -17,9 +17,12 @@
         <el-form-item label="商品照片">
           <el-upload
             class="avatar-uploader"
-            action="http://localhost:3838/usr/load/image"
+            :action="upLoadUrl"
             :show-file-list="false"
             :on-success="handleAvatarSuccess"
+            :on-error="loaderror"
+            :on-progress="loadPro"
+            :before-upload="beforeUp"
           >
             <img v-if="form.imageUrl" :src="form.imageUrl" class="avatar" />
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -61,7 +64,7 @@ export default {
   data() {
     return {
       item: {},
-
+      upLoadUrl: "http://localhost:3838/usr/load/image",
       form: {
         name: "",
         type: "食品",
@@ -75,11 +78,28 @@ export default {
     onSubmit() {
       console.log(this.form);
     },
+    beforeUp(file) {
+      const isJPG = file.type === "image/jpeg";
+      const isLt2M = file.size / 1024 / 1024 < 2;
+
+      if (!isJPG) {
+        this.$message.error("上传头像图片只能是 JPG 格式!");
+      }
+      if (!isLt2M) {
+        this.$message.error("上传头像图片大小不能超过 2MB!");
+      }
+      return isJPG && isLt2M;
+    },
     handleAvatarSuccess(res) {
       console.log(res.result);
       this.form.imageUrl = res.result.url;
     },
-
+    loaderror() {
+      alert("不好意思，上传失败了!");
+    },
+    loadPro(event) {
+      console.log(event.percent);
+    },
     handleChange(value) {
       console.log(value);
     },
