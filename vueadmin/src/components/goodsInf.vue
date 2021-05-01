@@ -6,13 +6,14 @@
       </router-link>
       <el-table
         :data="tableData"
-        row-style="height:50px"
+        :row-style="{ height: '50px' }"
         class="show_table"
-        :key="itemKey"
-        height="400"
-        border="1px solid transparent"
+        height="450"
       >
-        <el-table-column align="center" prop="id" label="id" width="80">
+        <el-table-column align="center" label="序号" width="100">
+          <template slot-scope="scope">
+            {{ scope.$index + 1 }}
+          </template>
         </el-table-column>
         <el-table-column align="center" prop="type" label="类型" width="120">
         </el-table-column>
@@ -69,6 +70,10 @@ export default {
   methods: {
     deleteRow(index, rows) {
       rows.splice(index, 1);
+      console.log(rows[index]);
+      myAjax
+        .post("/admin/goods/del", rows[index])
+        .then((res) => (this.tableData = res.data.data));
     },
     toChange(index, rows) {
       this.$router.push({ name: "添加商品", params: rows[index] });
@@ -85,7 +90,7 @@ export default {
 .show_table {
   position: relative;
   width: 100%;
-  height: 400px;
+  height: calc(100vh - 80px);
   border: none;
   overflow: auto;
 }

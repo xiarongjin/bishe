@@ -85,18 +85,26 @@ export default {
       if (this.form.id) {
         myAjax.post("/admin/goods/change", this.form).then((res) => {
           if (res.status == 200) {
+            this.$message({
+              duration: 500,
+              message: "修改成功！",
+            });
             this.$router.push({ name: "商品信息" });
           } else {
-            alert("服务器好像出问题了！");
+            this.$message("不好意思，服务器开小差了！");
           }
         });
       } else {
         myAjax.post("/admin/goods/add", this.form).then((res) => {
           console.log(res);
           if (res.status == 200) {
+            this.$message({
+              duration: 500,
+              message: "添加成功！",
+            });
             this.$router.push({ name: "商品信息" });
           } else {
-            alert("服务器好像出问题了！");
+            this.$message("不好意思，服务器开小差了！");
           }
         });
       }
@@ -117,7 +125,7 @@ export default {
       this.form.imageUrl = res.result.url;
     },
     loaderror() {
-      alert("不好意思，上传失败了!");
+      this.$message("不好意思，服务器开小差了！");
     },
     loadPro() {
       // console.log(event.percent);

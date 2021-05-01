@@ -5,9 +5,9 @@
         <div class="left col">
           <span>
             <span style="line-height:30px"
-              ><img src="" alt="照片" height="30"
+              ><img src="../assets/logo.png" alt="照片" height="30"
             /></span>
-            webxrj毕设
+            后台管理
           </span>
         </div>
         <div class="right col">
@@ -60,7 +60,7 @@
             class="homeWelcome"
             v-if="this.$router.currentRoute.path == '/home'"
           >
-            欢迎来到夏荣金毕设的后台！
+            欢迎来到夏荣金线上超市的后台！
           </div>
           <router-view :key="$route.fullPath" class="homeRouterView" />
         </el-main>

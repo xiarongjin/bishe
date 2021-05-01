@@ -2,6 +2,7 @@ var express = require("express");
 var axios = require("axios");
 const fetch = require("node-fetch");
 const uploadImg = require("./uploadImg");
+const fs = require("fs");
 //链接数据库
 var mysql = require("mysql");
 
@@ -124,21 +125,18 @@ router.post("/admin/goods/add", function (req, res) {
 
 //删除商品信息
 router.post("/admin/goods/del", function (req, res) {
-  let id = req.body.id;
-  // 先进行查询商品照片地址
-  let sql1 = `select image from goods where id=${id}`;
-  connection = mysql.createConnection(connection.config);
-  connection.connect();
-  connection.query(sql1, function (error, data1) {
-    if (error) return;
-    if (data1[0]) {
-      //获取商品照片地址url
-    }
-  });
-  let sql = `delete from goods where id=${id}`;
-  connection.query(sql, function (error, data) {
-    if (error) return;
+  let form = req.body;
+  // 先按商品照片地址对照片删除；
 
+  const imageArr = form.image.split("/");
+  fs.unlink(`${__dirname}/serverImage/${imageArr.slice(-1)}`, (err) => {
+    if (err) throw err;
+    console.log("删除成功");
+  });
+  //然后删除商品数据
+  let sql = `delete from goods where id=${form.id}`;
+  conDb(sql, function (error, data) {
+    if (error) return;
     if (data.affectedRows == 1) {
       res.send({
         msg: "删除成功",
@@ -149,7 +147,6 @@ router.post("/admin/goods/del", function (req, res) {
       });
     }
   });
-  connection.end();
 });
 
 //修改商品信息
