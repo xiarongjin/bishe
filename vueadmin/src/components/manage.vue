@@ -12,19 +12,6 @@
         </div>
         <div class="right col">
           <button class="fa fa-bell-o" aria-hidden="true"></button>
-          <el-dropdown size="medium">
-            <template>
-              <div style="height:50px">
-                <span>名字</span>
-                <img src="" alt="照片" />
-              </div>
-            </template>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item>个人中心</el-dropdown-item>
-              <el-dropdown-item>设置</el-dropdown-item>
-              <el-dropdown-item>注销登录</el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
         </div>
       </el-header>
 
@@ -70,6 +57,10 @@
 </template>
 <script>
 export default {
+  data() {
+    return {};
+  },
+
   methods: {
     handleOpen(key, keyPath) {
       console.log(key, keyPath);

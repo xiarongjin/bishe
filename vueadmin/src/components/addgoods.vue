@@ -37,7 +37,8 @@
             :step="0.1"
             :min="1"
             :max="10"
-          ></el-input-number>
+          >
+          </el-input-number>
         </el-form-item>
         <el-form-item label="商品库存">
           <el-input-number
@@ -88,6 +89,7 @@ export default {
             this.$message({
               duration: 500,
               message: "修改成功！",
+              type: "warning",
             });
             this.$router.push({ name: "商品信息" });
           } else {
@@ -101,6 +103,7 @@ export default {
             this.$message({
               duration: 500,
               message: "添加成功！",
+              type: "success",
             });
             this.$router.push({ name: "商品信息" });
           } else {

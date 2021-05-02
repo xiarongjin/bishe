@@ -9,8 +9,9 @@
         :row-style="{ height: '50px' }"
         class="show_table"
         height="450"
+        :default-sort="{ prop: 'id', order: 'descending' }"
       >
-        <el-table-column align="center" label="序号" width="100">
+        <el-table-column prop="id" align="center" label="序号" width="100">
           <template slot-scope="scope">
             {{ scope.$index + 1 }}
           </template>
@@ -27,6 +28,9 @@
           </template>
         </el-table-column>
         <el-table-column prop="price" label="价格" align="center" width="100">
+          <template slot-scope="scope">
+            <span> {{ tableData[scope.$index].price }}元 </span>
+          </template>
         </el-table-column>
         <el-table-column
           label="操作"
@@ -69,11 +73,17 @@ export default {
   },
   methods: {
     deleteRow(index, rows) {
-      rows.splice(index, 1);
-      console.log(rows[index]);
-      myAjax
-        .post("/admin/goods/del", rows[index])
-        .then((res) => (this.tableData = res.data.data));
+      console.log(index, rows[index]);
+      myAjax.post("/admin/goods/del", rows[index]).then((res) => {
+        console.log(res);
+        if (res.status == 200) {
+          rows.splice(index, 1);
+          this.$message.error({
+            duration: 500,
+            message: "删除成功！",
+          });
+        }
+      });
     },
     toChange(index, rows) {
       this.$router.push({ name: "添加商品", params: rows[index] });

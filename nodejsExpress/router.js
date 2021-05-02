@@ -56,9 +56,10 @@ router.post("/admin/login", function (req, res) {
 //用户登录验证
 router.post("/usr/login", function (req, res) {
   // 接受参数
-  var usrname = req.body.usrname;
+  let username = req.body.username;
   var password = req.body.password;
-  let sql = `SELECT password from usr WHERE name = '${usrname}'`;
+  let sql = `SELECT password from usr WHERE name = '${username}'`;
+
   conDb(sql, function (error, data) {
     if (error) return;
     if (data == "" || data == undefined) {
@@ -70,7 +71,7 @@ router.post("/usr/login", function (req, res) {
       if (data[0].password == password) {
         res.send({
           // msg:`${name}登录成功`,
-          usrname: usrname,
+          username: username,
           code: 1,
         });
       } else {
@@ -127,11 +128,10 @@ router.post("/admin/goods/add", function (req, res) {
 router.post("/admin/goods/del", function (req, res) {
   let form = req.body;
   // 先按商品照片地址对照片删除；
-
   const imageArr = form.image.split("/");
   fs.unlink(`${__dirname}/serverImage/${imageArr.slice(-1)}`, (err) => {
     if (err) throw err;
-    console.log("删除成功");
+    //删除成功
   });
   //然后删除商品数据
   let sql = `delete from goods where id=${form.id}`;
@@ -255,7 +255,7 @@ router.post("/usr/register", function (req, res) {
 //用户下单
 router.post("/usr/record/add", function (req, res) {
   let record = req.body;
-  let sql = `insert into record(usrName,goodsInfo,time) values ('${record.usrname}','${record.goodsInfo}','${record.time}')`;
+  let sql = `insert into record(usrName,goodsInfo,sumPrice,time) values ('${record.usrName}','${record.goodsInfo}','${record.sumPrice}','${record.time}')`;
   conDb(sql, function (error, data) {
     if (error) {
       res.send({

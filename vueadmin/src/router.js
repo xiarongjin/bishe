@@ -12,8 +12,14 @@ import GoodsInf from "./components/goodsInf";
 import OrderInf from "./components/orderInf";
 import UsrInf from "./components/usrInf";
 import AddGoods from "./components/addgoods";
+import Login from "./components/login";
 
 const routes = [
+  {
+    path: "/login",
+    name: "Login",
+    component: Login,
+  },
   {
     path: "/home",
     name: "Menu",
@@ -51,11 +57,11 @@ const routes = [
   },
   {
     path: "/",
-    redirect: "/home",
+    redirect: "/login",
   },
   {
     path: "*",
-    redirect: "/home",
+    redirect: "/login",
   },
 ];
 
