@@ -17,13 +17,7 @@
 
       <el-container>
         <el-aside width="200px">
-          <el-menu
-            default-active=""
-            class="el-menu-vertical-demo"
-            @open="handleOpen"
-            @close="handleClose"
-            router
-          >
+          <el-menu default-active="" class="el-menu-vertical-demo" router>
             <el-menu-item index="/admin">
               <i class="el-icon-menu"></i>
               <span slot="title">管理信息</span>
@@ -32,9 +26,15 @@
               <i class="el-icon-menu"></i>
               <span slot="title">商品信息</span>
             </el-menu-item>
-            <el-menu-item index="/orderInf">
+            <el-menu-item index="/orderInf" @click="getOrder">
               <i class="el-icon-menu"></i>
-              <span slot="title">预定信息<span class="textmsg"></span></span>
+              <span slot="title"
+                >预定信息<input
+                  v-show="this.$store.state.count > 0"
+                  v-model="this.$store.state.count"
+                  class="textmsg"
+                />
+              </span>
             </el-menu-item>
             <el-menu-item index="/usrInf">
               <i class="el-icon-menu"></i>
@@ -60,26 +60,25 @@ export default {
   data() {
     return {};
   },
-
   methods: {
-    handleOpen(key, keyPath) {
-      console.log(key, keyPath);
-    },
-    handleClose(key, keyPath) {
-      console.log(key, keyPath);
+    getOrder() {
+      this.$store.commit("getCunt", 1);
     },
   },
 };
 </script>
 <style>
 .textmsg {
-  display: block;
   position: absolute;
   top: 10px;
   right: 10px;
-  width: 10px;
-  height: 10px;
+  width: 15px;
+  height: 15px;
+  text-align: center;
+  color: #fff;
   border-radius: 50%;
+  padding: 0;
+  border: none;
   background: red;
 }
 /* 整体框架 */

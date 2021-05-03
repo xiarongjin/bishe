@@ -219,37 +219,20 @@ router.post("/usr/register", function (req, res) {
   let password = usrdata.password;
   let address = usrdata.address;
   let tel = usrdata.tel;
-
-  let sqlFirst = `select * from usr where name='${usrname}'`;
-  connection.connection = mysql.createConnection(connection.config);
-  connection.connect();
-  connection.query(sqlFirst, function (error, data) {
+  let sql = `INSERT INTO usr(name,password,tel,address) VALUES ('${usrname}','${password}','${tel}','${address}')`;
+  conDb(sql, function (error, data) {
     if (error) {
-    }
-
-    if (data == "" || data == undefined) {
-      let sql = `INSERT INTO usr(name,password,tel,address) VALUES ('${usrname}','${password}','${tel}','${address}')`;
-      connection.query(sql, function (error, data) {
-        if (error) {
-          res.send({
-            msg: "注册失败",
-            code: 0,
-          });
-        } else {
-          res.send({
-            msg: "注册成功",
-            code: 1,
-          });
-        }
+      res.send({
+        msg: "注册失败",
+        code: 0,
       });
     } else {
       res.send({
-        msg: "用户名已存在",
-        code: 3,
+        msg: "注册成功",
+        code: 1,
       });
     }
   });
-  connection.end();
 });
 
 //用户下单
