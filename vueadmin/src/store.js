@@ -8,10 +8,14 @@ const store = new Vuex.Store({
   state: {
     data: "",
     count: 0,
+    usrInf: "",
   },
   mutations: {
     getData(state, data) {
       state.data = data;
+    },
+    getUsr(state, data) {
+      state.usrInf = data;
     },
     getCunt(state, isZero = 0) {
       if (isZero == 0) {

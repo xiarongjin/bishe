@@ -1,0 +1,1 @@
+线下和线上的baseURl不一样，部署时需修改vueadmin文件里的baseUrl，shopping里面的baseUrl，和nodejsEXpress里baseURL

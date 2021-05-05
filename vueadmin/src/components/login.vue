@@ -42,7 +42,6 @@ export default {
   },
   methods: {
     onSubmit() {
-      console.log(this.form);
       myAjax.post("/admin/login", this.form).then((res) => {
         if (res.data.code === 1) {
           this.$message({

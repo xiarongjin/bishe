@@ -3,7 +3,12 @@
     <i type="primary" @click="getData" class="el-icon-refresh btnRe">刷新</i>
     <el-table :data="tableData" height="500" style="width: 100%">
       <el-table-column prop="id" label="订单号" width="100"> </el-table-column>
-      <el-table-column prop="usrName" label="用户姓名" width="140">
+      <el-table-column prop="usrName" label="用户信息" width="300">
+        <template slot-scope="scope">
+          姓名：{{ tableData[scope.$index].usrName }}<br />
+          电话：{{ getTel(tableData[scope.$index].usrName, 1) }}<br />
+          地址：{{ getTel(tableData[scope.$index].usrName, 0) }}
+        </template>
       </el-table-column>
       <el-table-column prop="id" label="商品表" width="180">
         <template slot-scope="scope">
@@ -20,9 +25,9 @@
           {{ tableData[scope.$index].sumPrice }}元
         </template>
       </el-table-column>
-      <el-table-column prop="time" label="下单时间" width="180">
+      <el-table-column prop="time" label="下单时间" width="120">
       </el-table-column>
-      <el-table-column prop="done" label="是否完成" width="180">
+      <el-table-column prop="done" label="是否完成" width="210">
         <template slot-scope="scope">
           <template v-if="tableData[scope.$index].done == 0" type="warning"
             ><span>未完成</span>
@@ -45,12 +50,23 @@ import myAjax from "../utils/ajax";
 export default {
   data() {
     return {
-      goodsData: [],
       tableData: [],
-      orderData: [],
+      usrInf: "",
     };
   },
   methods: {
+    getTel(usrName, type) {
+      let getObj = this.usrInf.filter((item) => {
+        if (item.name === usrName) {
+          return item;
+        }
+      });
+      if (type === 1) {
+        return getObj[0].tel;
+      } else {
+        return getObj[0].address;
+      }
+    },
     getName(inf) {
       return JSON.parse(inf).map((item) => item);
     },
@@ -68,11 +84,12 @@ export default {
       });
     },
   },
-  created() {
-    this.goodsData = this.$store.state.data;
-  },
+  created() {},
   mounted() {
     this.getData();
+    myAjax.get("/admin/search/usr").then((res) => {
+      this.usrInf = res.data.data;
+    });
   },
 };
 </script>

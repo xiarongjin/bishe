@@ -36,7 +36,7 @@
             :precision="2"
             :step="0.1"
             :min="1"
-            :max="10"
+            :max="1000"
           >
           </el-input-number>
         </el-form-item>
@@ -98,7 +98,6 @@ export default {
         });
       } else {
         myAjax.post("/admin/goods/add", this.form).then((res) => {
-          console.log(res);
           if (res.status == 200) {
             this.$message({
               duration: 500,
@@ -133,11 +132,11 @@ export default {
     loadPro() {
       // console.log(event.percent);
     },
-    handleChange(value) {
-      console.log(value);
+    handleChange() {
+      // console.log(value);
     },
-    priceChange(value) {
-      console.log(value);
+    priceChange() {
+      // console.log(value);
     },
   },
   mounted() {

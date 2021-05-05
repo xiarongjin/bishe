@@ -11,6 +11,10 @@ export default {
     myAjax
       .get("/admin/goods/search")
       .then((res) => this.$store.commit("getData", res.data.data));
+    myAjax.get("/admin/search/usr").then((res) => {
+      this.tableData = res.data.data;
+      this.$store.commit("getUsr", res.data.data);
+    });
   },
   data() {
     return {

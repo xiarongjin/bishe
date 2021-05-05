@@ -7,17 +7,14 @@
 </template>
 
 <script>
-import myAjax from "../utils/ajax";
 export default {
   data() {
     return {
       tableData: [],
     };
   },
-  mounted() {
-    myAjax
-      .get("/admin/search/usr")
-      .then((res) => (this.tableData = res.data.data));
+  created() {
+    this.tableData = this.$store.state.usrInf;
   },
 };
 </script>

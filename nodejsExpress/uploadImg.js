@@ -4,6 +4,8 @@ const path = require("path");
 const formidable = require("formidable");
 /* 用于时间格式化 */
 const formatTime = require("silly-datetime");
+const baseUrl = "http://webxrj.top:3838";
+// const baseUrl = "http://localhost:3838";
 
 /* 图片上传 */
 module.exports = (req, res) => {
@@ -22,7 +24,7 @@ module.exports = (req, res) => {
   form.parse(req, (err, fields, files) => {
     let file = files.file;
     /* 如果出错，则拦截 */
-    if (err) {
+    if (err || !file) {
       return res.send({ status: 500, msg: "服务器内部错误", result: "" });
     }
 
@@ -70,7 +72,7 @@ module.exports = (req, res) => {
         return res.send({
           status: 200,
           msg: "图片上传成功",
-          result: { url: `http://localhost:3838/serverImage/${imageName}` },
+          result: { url: `${baseUrl}/serverImage/${imageName}` },
         });
       }
     });

@@ -9,7 +9,6 @@
         :row-style="{ height: '50px' }"
         class="show_table"
         height="450"
-        :default-sort="{ prop: 'id', order: 'descending' }"
       >
         <el-table-column prop="id" align="center" label="序号" width="100">
           <template slot-scope="scope">
