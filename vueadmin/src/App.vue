@@ -56,8 +56,9 @@ export default {
     getMessage: function(msg) {
       // console.log(msg.data, 1);
       this.$store.commit("getCunt");
-      this.$message({ duration: 500, message: msg.data });
-      console.log(this.$store.state.count);
+      this.$message({ duration: 500, message: `用户${msg.data}下单啦！` });
+      // console.log(this.$store.state.count);
+      // console.log(msg.data.from);
     },
     send: function(params) {
       this.socket.send(params);

@@ -4,6 +4,7 @@
     <el-table :data="tableData" height="500" style="width: 100%">
       <el-table-column prop="id" label="订单号" width="100"> </el-table-column>
       <el-table-column prop="usrName" label="用户信息" width="300">
+        <!-- 使用插槽对用户信息进行处理 -->
         <template slot-scope="scope">
           姓名：{{ tableData[scope.$index].usrName }}<br />
           电话：{{ getTel(tableData[scope.$index].usrName, 1) }}<br />
@@ -55,6 +56,7 @@ export default {
     };
   },
   methods: {
+    // 处理信息方法
     getTel(usrName, type) {
       let getObj = this.usrInf.filter((item) => {
         if (item.name === usrName) {
@@ -84,13 +86,13 @@ export default {
       });
     },
   },
-  created() {},
-  mounted() {
+  created() {
     this.getData();
     myAjax.get("/admin/search/usr").then((res) => {
       this.usrInf = res.data.data;
     });
   },
+  mounted() {},
 };
 </script>
 <style scoped>
