@@ -11,7 +11,7 @@
 </template>
 
 <script lang="ts">
-import { exportJson2Excel } from "../utils/Export2Excel";
+import { exportJson2Excel } from "webxrj-jslib";
 export default {
   data() {
     return {
